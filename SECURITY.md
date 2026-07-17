@@ -1,34 +1,30 @@
-# Security policy
+# 安全策略
 
-## Supported versions
+## 支持版本
 
-Security fixes are applied to the latest release and the current default
-branch.
+安全修复适用于最新发布版本和当前默认分支。
 
-## Reporting a vulnerability
+## 报告安全漏洞
 
-Please use the repository's private GitHub Security Advisory reporting flow.
-Include:
+请使用仓库的 GitHub 私密安全公告报告功能，并提供：
 
-- the affected version or commit;
-- browser and operating-system family when relevant;
-- a minimal reproduction;
-- the expected and observed behavior; and
-- the potential impact.
+- 受影响的版本或提交；
+- 与问题相关时，浏览器与操作系统类型；
+- 最小可复现示例；
+- 预期行为和实际行为；
+- 潜在影响。
 
-Do not include live credentials, personal data, or unrelated device details.
-Please do not open a public issue for an unpatched vulnerability.
+请勿提交真实凭据、个人数据或无关的设备信息。未修复的漏洞不要通过公开 Issue 报告。
 
-## Security model
+## 安全模型
 
-WebGPU Kernel Lab is a static, local browser application:
+WebGPU 内核实验室是一个静态、本地运行的浏览器应用：
 
-- it has no server-side component or authentication surface;
-- it makes no application network requests;
-- it does not execute user-provided WGSL;
-- it uses fixed, reviewed shader strings bundled at build time;
-- exported JSON excludes adapter identity and full buffers; and
-- it destroys per-sample GPU buffers after readback.
+- 没有服务端组件或身份验证入口；
+- 不发起应用级网络请求；
+- 不执行用户提供的 WGSL；
+- 只使用构建时打包、经过检查的固定着色器字符串；
+- 导出的 JSON 不包含适配器身份或完整缓冲区；
+- 每次样本回读后都会销毁对应的 GPU 缓冲区。
 
-Browser and GPU-driver security remain outside the project's control. Keep the
-browser and operating system current.
+浏览器与 GPU 驱动的安全不在本项目控制范围内，请保持浏览器和操作系统为最新版本。

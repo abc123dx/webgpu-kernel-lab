@@ -28,7 +28,7 @@ export function vectorAddCpu(
   inputB: Float32Array,
 ): Float32Array {
   if (inputA.length !== inputB.length) {
-    throw new RangeError("vector inputs must have the same length");
+    throw new RangeError("两个向量输入必须具有相同长度");
   }
 
   const output = new Float32Array(inputA.length);

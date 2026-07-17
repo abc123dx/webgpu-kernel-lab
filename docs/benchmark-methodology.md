@@ -1,59 +1,54 @@
-# Benchmark methodology
+# 测量方法
 
-## Scope
+## 适用范围
 
-WebGPU Kernel Lab measures an educational end-to-end browser path. It is useful
-for comparing settings during one session and for understanding the cost
-components surrounding a compute shader. It is not designed to rank hardware.
+WebGPU 内核实验室测量的是教学用途的浏览器端到端路径。它适合在同一次会话中
+比较不同设置，并理解计算着色器周围各环节的成本；它并不用于给硬件排名。
 
-## GPU sample boundary
+## GPU 样本边界
 
-Each GPU sample:
+每个 GPU 样本会：
 
-1. reuses a cached compute pipeline;
-2. creates and fills fresh storage and uniform buffers;
-3. creates an output and mapped readback buffer;
-4. encodes the compute pass and copy;
-5. starts the timer immediately before queue submission;
-6. submits the command buffer;
-7. awaits `mapAsync(GPUMapMode.READ)`;
-8. stops the timer; and
-9. copies the mapped data into a standalone `Float32Array`.
+1. 复用已缓存的计算流水线；
+2. 新建并填充存储缓冲区和统一参数缓冲区；
+3. 新建输出缓冲区与可映射的回读缓冲区；
+4. 编码计算通道和复制命令；
+5. 在队列提交前一刻启动计时器；
+6. 提交命令缓冲区；
+7. 等待 `mapAsync(GPUMapMode.READ)` 完成；
+8. 停止计时器；
+9. 将映射数据复制到独立的 `Float32Array`。
 
-Buffer creation and encoding occur before the timer. Queue submission, GPU
-execution, output copy, and map/readback wait are included.
+缓冲区创建和命令编码发生在计时开始之前。计时范围包含队列提交、GPU 执行、
+输出复制以及映射/回读等待。
 
-## CPU sample boundary
+## CPU 样本边界
 
-Each CPU sample starts immediately before the typed reference function and ends
-after it returns its new `Float32Array`. A zero-delay yield follows each sample
-so the browser can update progress between longer runs.
+每个 CPU 样本在调用类型明确的参考函数前一刻开始计时，在函数返回新的
+`Float32Array` 后结束。每个样本之后会执行一次零延迟让步，以便浏览器在
+较长实验期间更新进度。
 
-## Statistics
+## 统计方法
 
-Warmup results are discarded. Measured samples produce:
+预热结果会被丢弃。正式测量样本用于计算：
 
-- minimum and maximum;
-- arithmetic mean;
-- linearly interpolated median and p95; and
-- population standard deviation.
+- 最小值和最大值；
+- 算术平均值；
+- 线性插值的中位数和 p95；
+- 总体标准差。
 
-Throughput divides a documented modeled operation count by median duration. The
-model is:
+吞吐量等于文档定义的模型化运算次数除以中位耗时。运算量模型如下：
 
-- vector add: one operation per element;
-- matrix multiply: `2 × N³` operations; and
-- convolution: `width × height × 3 channels × 9 taps × 2` operations.
+- 向量加法：每个元素计一次运算；
+- 矩阵乘法：`2 × N³` 次运算；
+- 卷积：`宽 × 高 × 3 个通道 × 9 个采样点 × 2` 次运算。
 
-These counts are explanatory models, not an assertion about the exact
-instructions executed by a compiler or device.
+这些数字用于解释工作规模，不代表编译器或设备实际执行的精确指令数。
 
-## Reproducibility guidance
+## 提高可重复性的建议
 
-For a more stable comparison:
-
-- keep the tab visible;
-- use the same browser and power mode;
-- close unrelated heavy workloads;
-- run more than five measured samples; and
-- compare medians and distributions, not a single fastest number.
+- 保持标签页可见；
+- 使用相同的浏览器和电源模式；
+- 关闭无关的高负载任务；
+- 正式测量至少运行五次；
+- 比较中位数和整体分布，而不是单次最快结果。

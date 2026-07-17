@@ -51,13 +51,13 @@ export function imageConvolutionCpu(
   weights: Float32Array,
 ): Float32Array {
   if (!Number.isInteger(width) || width <= 0 || !Number.isInteger(height) || height <= 0) {
-    throw new RangeError("image dimensions must be positive integers");
+    throw new RangeError("图像宽度和高度必须是正整数");
   }
   if (input.length !== width * height * 4) {
-    throw new RangeError("image input must contain width × height × 4 values");
+    throw new RangeError("图像输入必须包含 width × height × 4 个数值");
   }
   if (weights.length !== 9) {
-    throw new RangeError("convolution filter must contain 9 weights");
+    throw new RangeError("卷积滤镜必须包含 9 个权重");
   }
 
   const output = new Float32Array(input.length);

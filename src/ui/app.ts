@@ -56,7 +56,7 @@ export class KernelLabApp {
     capability: null,
     result: null,
     running: false,
-    progress: "Initializing device…",
+    progress: "正在初始化设备…",
     error: null,
   };
 
@@ -79,27 +79,27 @@ export class KernelLabApp {
       <div class="ambient ambient-one"></div>
       <div class="ambient ambient-two"></div>
       <header class="topbar">
-        <a class="brand" href="#top" aria-label="WebGPU Kernel Lab home">
+        <a class="brand" href="#top" aria-label="返回 WebGPU 内核实验室首页">
           <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-          <span>Kernel Lab</span>
+          <span>内核实验室</span>
         </a>
         <div class="local-badge">
           <span aria-hidden="true"></span>
-          Local execution · zero uploads
+          本地运行 · 零上传
         </div>
       </header>
 
       <main id="top">
         <section class="hero">
           <div class="hero-copy">
-            <p class="eyebrow"><span>01</span> Browser compute, made inspectable</p>
-            <h1>See the kernel.<br><em>Measure the work.</em></h1>
+            <p class="eyebrow"><span>01</span> 看得见的浏览器计算</p>
+            <h1>读懂内核。<br><em>量化计算。</em></h1>
             <p class="hero-lede">
-              Run real WGSL compute beside a typed CPU reference. Warm the pipeline,
-              inspect the dispatch, validate every value, then export the evidence.
+              让真实 WGSL 计算与类型明确的 CPU 参考实现并行运行。预热流水线、
+              检查调度、逐值校验，最后导出完整证据。
             </p>
             <div class="hero-actions">
-              <a class="button secondary" href="#workbench">Open workbench</a>
+              <a class="button secondary" href="#workbench">打开实验台</a>
               ${renderStatusPill(this.#state.capability)}
             </div>
           </div>
@@ -109,24 +109,24 @@ export class KernelLabApp {
             <div class="orbit-core">
               <span>WGSL</span>
               <strong>64</strong>
-              <small>threads / group</small>
+              <small>线程 / 工作组</small>
             </div>
-            <span class="orbit-label label-a">dispatch</span>
-            <span class="orbit-label label-b">validate</span>
-            <span class="orbit-label label-c">readback</span>
+            <span class="orbit-label label-a">调度</span>
+            <span class="orbit-label label-b">校验</span>
+            <span class="orbit-label label-c">回读</span>
           </div>
         </section>
 
         <section class="workbench-section" id="workbench">
           <div class="section-heading">
             <div>
-              <p class="eyebrow"><span>02</span> Experiment surface</p>
-              <h2>One input. Two paths. No hidden backend.</h2>
+              <p class="eyebrow"><span>02</span> 实验工作区</p>
+              <h2>同一份输入，两条执行路径，没有隐藏后端。</h2>
             </div>
-            <p>The selected CPU and GPU paths receive the same deterministic data.</p>
+            <p>所选 CPU 与 GPU 路径接收完全相同的确定性数据。</p>
           </div>
 
-          <div class="kernel-tabs" role="tablist" aria-label="Compute kernel">
+          <div class="kernel-tabs" role="tablist" aria-label="计算内核">
             ${KERNELS.map((kernel, index) => `
               <button
                 class="kernel-tab ${kernel.kind === this.#state.config.kernel ? "active" : ""}"
@@ -144,7 +144,7 @@ export class KernelLabApp {
 
           <div class="workbench-grid">
             <article class="panel controls-panel">
-              <div class="panel-kicker">Configuration</div>
+              <div class="panel-kicker">实验配置</div>
               <div class="kernel-heading">
                 <div>
                   <h3>${descriptor.title}</h3>
@@ -155,32 +155,32 @@ export class KernelLabApp {
 
               <div class="control-grid">
                 <label class="field">
-                  <span>Execution path</span>
+                  <span>执行路径</span>
                   <select id="backend-select" ${this.#state.running ? "disabled" : ""}>
-                    ${selectOption("auto", "Auto · prefer WebGPU", this.#state.config.backend)}
-                    ${selectOption("webgpu", "WebGPU · fallback if needed", this.#state.config.backend)}
-                    ${selectOption("cpu", "CPU reference only", this.#state.config.backend)}
+                    ${selectOption("auto", "自动 · 优先 WebGPU", this.#state.config.backend)}
+                    ${selectOption("webgpu", "WebGPU · 不可用时回退", this.#state.config.backend)}
+                    ${selectOption("cpu", "仅使用 CPU 参考实现", this.#state.config.backend)}
                   </select>
                 </label>
                 ${this.#renderSizeControl()}
                 ${this.#state.config.kernel === "image-convolution" ? `
                   <label class="field">
-                    <span>Filter preset</span>
+                    <span>滤镜预设</span>
                     <select id="filter-select" ${this.#state.running ? "disabled" : ""}>
-                      ${selectOption("gaussian-blur", "Gaussian blur", this.#state.config.convolutionPreset)}
-                      ${selectOption("sharpen", "Sharpen", this.#state.config.convolutionPreset)}
-                      ${selectOption("edge-detect", "Edge detect", this.#state.config.convolutionPreset)}
+                      ${selectOption("gaussian-blur", "高斯模糊", this.#state.config.convolutionPreset)}
+                      ${selectOption("sharpen", "锐化", this.#state.config.convolutionPreset)}
+                      ${selectOption("edge-detect", "边缘检测", this.#state.config.convolutionPreset)}
                     </select>
                   </label>
                 ` : ""}
                 <label class="field compact-field">
-                  <span>Warmups</span>
+                  <span>预热次数</span>
                   <input id="warmup-input" type="number" min="0" max="10"
                     value="${this.#state.config.warmupIterations}"
                     ${this.#state.running ? "disabled" : ""}>
                 </label>
                 <label class="field compact-field">
-                  <span>Samples</span>
+                  <span>测量次数</span>
                   <input id="iterations-input" type="number" min="1" max="30"
                     value="${this.#state.config.benchmarkIterations}"
                     ${this.#state.running ? "disabled" : ""}>
@@ -191,14 +191,14 @@ export class KernelLabApp {
                 ${this.#state.running ? "disabled" : ""}>
                 <span class="run-icon" aria-hidden="true">${this.#state.running ? "···" : "▶"}</span>
                 <span>
-                  <strong>${this.#state.running ? "Experiment running" : "Run experiment"}</strong>
-                  <small>${this.#state.running ? escapeHtml(this.#state.progress) : "Warm up · benchmark · verify"}</small>
+                  <strong>${this.#state.running ? "实验运行中" : "运行实验"}</strong>
+                  <small>${this.#state.running ? escapeHtml(this.#state.progress) : "预热 · 测量 · 校验"}</small>
                 </span>
               </button>
 
               ${this.#state.error ? `
                 <div class="error-message" role="alert">
-                  <strong>Experiment stopped</strong>
+                  <strong>实验已停止</strong>
                   <span>${escapeHtml(this.#state.error)}</span>
                 </div>
               ` : ""}
@@ -210,10 +210,10 @@ export class KernelLabApp {
                 <span>${this.#state.config.kernel}.wgsl</span>
                 <span class="language-label">WGSL</span>
               </div>
-              <pre tabindex="0" aria-label="${descriptor.title} WGSL source preview"><code>${escapeHtml(codeFor(this.#state.config.kernel))}</code></pre>
+              <pre tabindex="0" aria-label="${descriptor.title} WGSL 源码预览"><code>${escapeHtml(codeFor(this.#state.config.kernel))}</code></pre>
               <div class="code-footer">
-                <span><i class="status-dot"></i> Bounds checked</span>
-                <span>No shader generation</span>
+                <span><i class="status-dot"></i> 已进行边界检查</span>
+                <span>不动态生成着色器</span>
               </div>
             </article>
           </div>
@@ -222,12 +222,12 @@ export class KernelLabApp {
         <section class="results-section" aria-live="polite">
           <div class="section-heading compact">
             <div>
-              <p class="eyebrow"><span>03</span> Measurement</p>
-              <h2>Evidence, not a victory lap.</h2>
+              <p class="eyebrow"><span>03</span> 测量结果</p>
+              <h2>用证据说话，不做性能炫技。</h2>
             </div>
             ${this.#state.result ? `
               <button type="button" class="button tertiary" id="export-button">
-                Export JSON <span aria-hidden="true">↓</span>
+                导出 JSON <span aria-hidden="true">↓</span>
               </button>
             ` : ""}
           </div>
@@ -237,10 +237,10 @@ export class KernelLabApp {
         <section class="capability-section">
           <div class="section-heading compact">
             <div>
-              <p class="eyebrow"><span>04</span> Device boundary</p>
-              <h2>What this browser actually exposes.</h2>
+              <p class="eyebrow"><span>04</span> 设备能力边界</p>
+              <h2>查看当前浏览器真正开放了哪些能力。</h2>
             </div>
-            <p>Reported locally by the WebGPU adapter and device.</p>
+            <p>数据由本地 WebGPU 适配器与设备直接报告。</p>
           </div>
           ${renderCapabilities(this.#state.capability)}
         </section>
@@ -248,18 +248,18 @@ export class KernelLabApp {
         <section class="method-section">
           <article>
             <span class="method-number">A</span>
-            <h3>Deterministic inputs</h3>
-            <p>A seeded generator makes CPU and GPU paths operate on identical values.</p>
+            <h3>确定性输入</h3>
+            <p>固定种子的生成器确保 CPU 与 GPU 路径处理完全相同的数值。</p>
           </article>
           <article>
             <span class="method-number">B</span>
-            <h3>Honest timing</h3>
-            <p>GPU samples include queue submission and mapped-buffer readback, not isolated shader timestamps.</p>
+            <h3>如实计时</h3>
+            <p>GPU 测量包含队列提交和映射缓冲区回读，而不是孤立的着色器时间。</p>
           </article>
           <article>
             <span class="method-number">C</span>
-            <h3>Explicit validation</h3>
-            <p>Every returned float is compared with the typed CPU reference using a documented tolerance.</p>
+            <h3>明确校验</h3>
+            <p>按照文档中的误差容限，将每个返回浮点数与 CPU 参考结果逐一比较。</p>
           </article>
         </section>
       </main>
@@ -267,10 +267,10 @@ export class KernelLabApp {
       <footer>
         <div class="brand footer-brand">
           <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-          <span>WebGPU Kernel Lab</span>
+          <span>WebGPU 内核实验室</span>
         </div>
-        <p>Runs entirely in this tab. No account, network API, or telemetry.</p>
-        <span>v0.1.0 · MIT</span>
+        <p>完全在当前标签页运行，无需账号，不调用网络 API，也不收集遥测数据。</p>
+        <span>v0.1.1 · MIT</span>
       </footer>
     `;
     this.#bindEvents();
@@ -281,7 +281,7 @@ export class KernelLabApp {
     if (config.kernel === "vector-add") {
       return rangeField(
         "size-input",
-        "Vector length",
+        "向量长度",
         config.vectorLength,
         65_536,
         1_048_576,
@@ -293,7 +293,7 @@ export class KernelLabApp {
     if (config.kernel === "matrix-multiply") {
       return rangeField(
         "size-input",
-        "Square matrix",
+        "方阵规模",
         config.matrixSize,
         16,
         128,
@@ -304,7 +304,7 @@ export class KernelLabApp {
     }
     return rangeField(
       "size-input",
-      "Generated image",
+      "生成图像尺寸",
       config.imageSize,
       32,
       512,
@@ -390,7 +390,7 @@ export class KernelLabApp {
     this.#state.running = true;
     this.#state.error = null;
     this.#state.result = null;
-    this.#state.progress = "Preparing deterministic inputs…";
+    this.#state.progress = "正在准备确定性输入…";
     this.#render();
 
     try {
@@ -401,7 +401,7 @@ export class KernelLabApp {
       );
     } catch (error) {
       this.#state.error =
-        error instanceof Error ? error.message : "An unknown error occurred.";
+        error instanceof Error ? error.message : "发生未知错误。";
     } finally {
       this.#state.running = false;
       this.#state.progress = "";
@@ -411,10 +411,10 @@ export class KernelLabApp {
 
   #updateProgress(phase: ExperimentPhase, completed: number, total: number): void {
     const labels: Record<ExperimentPhase, string> = {
-      preparing: "Preparing deterministic inputs…",
-      warming: `Warming pipeline ${completed}/${total}`,
-      benchmarking: `Collecting sample ${completed}/${total}`,
-      validating: "Comparing every returned value…",
+      preparing: "正在准备确定性输入…",
+      warming: `正在预热流水线 ${completed}/${total}`,
+      benchmarking: `正在采集测量样本 ${completed}/${total}`,
+      validating: "正在逐一比较返回值…",
     };
     this.#state.progress = labels[phase];
     const detail = this.#root.querySelector<HTMLElement>(".run-button small");
@@ -426,12 +426,12 @@ export class KernelLabApp {
 
 function renderStatusPill(report: WebGpuCapabilityReport | null): string {
   if (!report) {
-    return `<span class="status-pill pending"><i></i>Inspecting device</span>`;
+    return `<span class="status-pill pending"><i></i>正在检查设备</span>`;
   }
   const ready = report.status === "ready";
   return `
     <span class="status-pill ${ready ? "ready" : "fallback"}">
-      <i></i>${ready ? "WebGPU ready" : "CPU fallback ready"}
+      <i></i>${ready ? "WebGPU 已就绪" : "CPU 回退已就绪"}
     </span>
   `;
 }
@@ -443,8 +443,8 @@ function renderEmptyResult(running: boolean, progress: string): string {
         ${Array.from({ length: 18 }, (_, index) => `<i style="--level:${(index * 37) % 91 + 8}%"></i>`).join("")}
       </div>
       <div>
-        <strong>${running ? "Measurement in progress" : "No measurement yet"}</strong>
-        <p>${escapeHtml(running ? progress : "Choose a kernel and run the experiment. Results stay in this tab until you export them.")}</p>
+        <strong>${running ? "正在测量" : "尚无测量结果"}</strong>
+        <p>${escapeHtml(running ? progress : "选择一个内核并运行实验。结果只保留在当前标签页，除非你主动导出。")}</p>
       </div>
     </div>
   `;
@@ -459,32 +459,32 @@ function renderResult(result: ExperimentResult): string {
     ${result.fallbackReason ? `<div class="fallback-banner">${escapeHtml(result.fallbackReason)}</div>` : ""}
     <div class="result-grid">
       <article class="metric-card primary-metric">
-        <span>Median · ${result.backend.toUpperCase()}</span>
+        <span>中位数 · ${result.backend.toUpperCase()}</span>
         <strong>${formatMilliseconds(result.benchmark.medianMs)}</strong>
-        <small>${result.benchmark.iterations} measured samples</small>
+        <small>${result.benchmark.iterations} 个有效测量样本</small>
       </article>
       <article class="metric-card">
-        <span>CPU reference</span>
+        <span>CPU 参考结果</span>
         <strong>${formatMilliseconds(result.cpuReference.medianMs)}</strong>
-        <small>${speedup === null ? "Selected execution path" : `${formatRatio(speedup)} relative speed`}</small>
+        <small>${speedup === null ? "当前所选执行路径" : `相对速度 ${formatRatio(speedup)}`}</small>
       </article>
       <article class="metric-card">
-        <span>Validation</span>
+        <span>数值校验</span>
         <strong class="${result.validation.passed ? "pass-text" : "fail-text"}">
-          ${result.validation.passed ? "PASS" : "FAIL"}
+          ${result.validation.passed ? "通过" : "未通过"}
         </strong>
-        <small>max error ${formatScientific(result.validation.maximumAbsoluteError)}</small>
+        <small>最大误差 ${formatScientific(result.validation.maximumAbsoluteError)}</small>
       </article>
       <article class="metric-card">
-        <span>Throughput</span>
+        <span>吞吐量</span>
         <strong>${formatThroughput(result.operationsPerSecond)}</strong>
-        <small>${result.operationCount.toLocaleString()} modeled operations</small>
+        <small>${result.operationCount.toLocaleString()} 次模型化运算</small>
       </article>
     </div>
     <div class="result-detail-grid">
       <article class="panel result-detail">
-        <div class="panel-kicker">Output fingerprint</div>
-        <div class="signal-chart" aria-label="Chart of the first output values">
+        <div class="panel-kicker">输出指纹</div>
+        <div class="signal-chart" aria-label="前若干个输出值的柱状图">
           ${renderSignalBars(result.outputPreview)}
         </div>
         <div class="preview-values">
@@ -492,13 +492,13 @@ function renderResult(result: ExperimentResult): string {
         </div>
       </article>
       <article class="panel result-detail result-table-wrap">
-        <div class="panel-kicker">Run record</div>
+        <div class="panel-kicker">运行记录</div>
         <dl class="run-record">
-          <div><dt>Backend</dt><dd>${result.backend.toUpperCase()}</dd></div>
-          <div><dt>Min / p95</dt><dd>${formatMilliseconds(result.benchmark.minimumMs)} / ${formatMilliseconds(result.benchmark.p95Ms)}</dd></div>
-          <div><dt>Input / output</dt><dd>${formatDataSize(result.inputBytes)} / ${formatDataSize(result.outputBytes)}</dd></div>
-          <div><dt>Dispatch</dt><dd>${result.dispatch ? result.dispatch.join(" × ") : "CPU loop"}</dd></div>
-          <div><dt>Mismatches</dt><dd>${result.validation.mismatchCount.toLocaleString()} / ${result.validation.comparedValues.toLocaleString()}</dd></div>
+          <div><dt>执行后端</dt><dd>${result.backend.toUpperCase()}</dd></div>
+          <div><dt>最小值 / p95</dt><dd>${formatMilliseconds(result.benchmark.minimumMs)} / ${formatMilliseconds(result.benchmark.p95Ms)}</dd></div>
+          <div><dt>输入 / 输出</dt><dd>${formatDataSize(result.inputBytes)} / ${formatDataSize(result.outputBytes)}</dd></div>
+          <div><dt>调度规模</dt><dd>${result.dispatch ? result.dispatch.join(" × ") : "CPU 循环"}</dd></div>
+          <div><dt>不匹配数量</dt><dd>${result.validation.mismatchCount.toLocaleString()} / ${result.validation.comparedValues.toLocaleString()}</dd></div>
         </dl>
       </article>
     </div>
@@ -509,7 +509,7 @@ function renderCapabilities(report: WebGpuCapabilityReport | null): string {
   if (!report) {
     return `
       <div class="capability-loading panel">
-        <i></i><div><strong>Inspecting the browser device boundary</strong><span>Requesting an adapter without sending data anywhere.</span></div>
+        <i></i><div><strong>正在检查浏览器设备能力</strong><span>只在本地请求适配器，不向任何位置发送数据。</span></div>
       </div>
     `;
   }
@@ -520,7 +520,7 @@ function renderCapabilities(report: WebGpuCapabilityReport | null): string {
       <div class="capability-summary ${ready ? "ready" : "fallback"}">
         <div class="capability-icon" aria-hidden="true">${ready ? "◆" : "◇"}</div>
         <div>
-          <span>${ready ? "Hardware path" : "Compatibility path"}</span>
+          <span>${ready ? "硬件执行路径" : "兼容执行路径"}</span>
           <h3>${escapeHtml(report.headline)}</h3>
           <p>${escapeHtml(report.detail)}</p>
         </div>
@@ -536,19 +536,19 @@ function renderCapabilities(report: WebGpuCapabilityReport | null): string {
         </div>
         <div class="adapter-row">
           <div>
-            <span>Adapter</span>
+            <span>适配器</span>
             <strong>${escapeHtml(adapterLabel(report))}</strong>
           </div>
           <div class="feature-list">
             ${report.features.length > 0
               ? report.features.slice(0, 6).map((feature) => `<span>${escapeHtml(feature)}</span>`).join("")
-              : `<span>Core features only</span>`}
+              : `<span>仅核心功能</span>`}
           </div>
         </div>
       ` : `
         <div class="fallback-explainer">
-          <strong>Nothing is disabled.</strong>
-          <p>All three kernels use their CPU reference implementation and preserve validation, warmups, sampling, and JSON export.</p>
+          <strong>所有实验仍可运行。</strong>
+          <p>三个内核都会改用 CPU 参考实现，并继续提供数值校验、预热、重复测量和 JSON 导出。</p>
         </div>
       `}
     </div>
@@ -603,13 +603,13 @@ function renderSignalBars(values: readonly number[]): string {
 }
 
 function adapterLabel(report: WebGpuCapabilityReport): string {
-  if (!report.adapter) return "Not reported";
+  if (!report.adapter) return "未报告";
   const parts = [
     report.adapter.description,
     report.adapter.vendor,
     report.adapter.architecture,
-  ].filter((value, index, items) => value !== "Not reported" && items.indexOf(value) === index);
-  return parts.join(" · ") || "Browser-managed adapter";
+  ].filter((value, index, items) => value !== "未报告" && items.indexOf(value) === index);
+  return parts.join(" · ") || "浏览器管理的适配器";
 }
 
 function formatScientific(value: number): string {

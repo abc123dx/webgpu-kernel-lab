@@ -67,7 +67,7 @@ export class WebGpuRuntime {
     inputB: Float32Array,
   ): Promise<GpuExecutionResult> {
     if (inputA.length !== inputB.length || inputA.length === 0) {
-      throw new RangeError("vector inputs must have the same non-zero length");
+      throw new RangeError("两个向量输入必须具有相同且非零的长度");
     }
     const dispatch = [
       Math.ceil(inputA.length / VECTOR_ADD_WORKGROUP_SIZE),
@@ -95,7 +95,7 @@ export class WebGpuRuntime {
       matrixA.length !== size * size ||
       matrixB.length !== size * size
     ) {
-      throw new RangeError("matrix inputs must contain size × size elements");
+      throw new RangeError("矩阵输入必须包含 size × size 个元素");
     }
     const groups = Math.ceil(size / MATRIX_WORKGROUP_SIZE);
     return this.#execute(
@@ -122,7 +122,7 @@ export class WebGpuRuntime {
       input.length !== width * height * 4 ||
       weights.length !== 9
     ) {
-      throw new RangeError("invalid image or convolution filter dimensions");
+      throw new RangeError("图像或卷积滤镜尺寸无效");
     }
     return this.#execute(
       "image-convolution",
@@ -155,7 +155,7 @@ export class WebGpuRuntime {
     dispatch: readonly [number, number, number],
   ): Promise<GpuExecutionResult> {
     if (this.#disposed) {
-      throw new Error("WebGPU runtime has been disposed");
+      throw new Error("WebGPU 运行时已释放");
     }
 
     const pipeline = await this.#getPipeline(pipelineKey, shaderCode);

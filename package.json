@@ -1,9 +1,9 @@
 {
   "name": "webgpu-kernel-lab",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
-  "description": "A local browser lab for learning, validating, and benchmarking WebGPU compute kernels.",
+  "description": "在浏览器本地学习、校验并测量 WebGPU 计算内核的实验室。",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
