@@ -1,31 +1,28 @@
-# Contributing
+# 贡献指南
 
-Contributions that improve correctness, accessibility, browser compatibility,
-tests, or explanations are welcome.
+欢迎提交能够提升正确性、无障碍体验、浏览器兼容性、测试质量或说明清晰度的贡献。
 
-## Development
+## 开发
 
 ```bash
 npm install
 npm run dev
 ```
 
-Before proposing a change:
+提交变更前请运行：
 
 ```bash
 npm run check
 ```
 
-## Expectations
+## 贡献要求
 
-- Keep computation local and deterministic.
-- Add or update a CPU reference before changing a WGSL kernel.
-- Add tests for numerical behavior, invalid inputs, and new export fields.
-- Preserve the friendly CPU fallback.
-- Do not add analytics, remote assets, secret-bearing examples, or personal
-  information.
-- Document timing boundaries and avoid unsupported performance claims.
-- Keep exported schemas backward compatible or explicitly version them.
+- 保持计算在本地运行且结果可确定复现。
+- 修改 WGSL 内核前，先新增或更新对应的 CPU 参考实现。
+- 为数值行为、无效输入和新增导出字段补充测试。
+- 保留友好的 CPU 自动回退路径。
+- 不要添加分析服务、远程资源、包含密钥的示例或个人信息。
+- 明确记录计时边界，避免没有依据的性能结论。
+- 保持导出结构向后兼容；如确需破坏兼容性，必须明确升级版本。
 
-Small, focused changes are easier to review. Explain the behavior being changed
-and include reproducible validation steps.
+小而聚焦的变更更容易审查。请说明行为变化，并附上可复现的验证步骤。

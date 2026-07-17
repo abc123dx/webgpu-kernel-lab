@@ -20,7 +20,7 @@ export const CONVOLUTION_FILTERS: Record<ConvolutionPreset, Float32Array> = {
 
 export function createSequence(length: number, seed = 0x1234abcd): Float32Array {
   if (!Number.isInteger(length) || length < 0) {
-    throw new RangeError("length must be a non-negative integer");
+    throw new RangeError("长度必须是非负整数");
   }
 
   let state = seed >>> 0;
@@ -33,12 +33,12 @@ export function createSequence(length: number, seed = 0x1234abcd): Float32Array 
 }
 
 export function createMatrix(size: number, seed: number): Float32Array {
-  assertPositiveInteger(size, "matrix size");
+  assertPositiveInteger(size, "矩阵规模");
   return createSequence(size * size, seed);
 }
 
 export function createTestImage(size: number): Float32Array {
-  assertPositiveInteger(size, "image size");
+  assertPositiveInteger(size, "图像尺寸");
   const pixels = new Float32Array(size * size * 4);
 
   for (let y = 0; y < size; y += 1) {
@@ -59,7 +59,7 @@ export function createTestImage(size: number): Float32Array {
 
 export function assertPositiveInteger(value: number, label: string): void {
   if (!Number.isInteger(value) || value <= 0) {
-    throw new RangeError(`${label} must be a positive integer`);
+    throw new RangeError(`${label}必须是正整数`);
   }
 }
 

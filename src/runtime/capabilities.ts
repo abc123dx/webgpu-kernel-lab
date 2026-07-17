@@ -23,9 +23,9 @@ export interface WebGpuCapabilityReport {
 export function unsupportedReport(): WebGpuCapabilityReport {
   return {
     status: "unsupported",
-    headline: "CPU fallback active",
+    headline: "CPU 回退模式已启用",
     detail:
-      "This browser does not expose WebGPU. Every experiment remains available through the typed CPU reference path.",
+      "当前浏览器未开放 WebGPU。所有实验仍可通过类型明确的 CPU 参考路径运行。",
     adapter: null,
     features: [],
     limits: [],
@@ -35,9 +35,9 @@ export function unsupportedReport(): WebGpuCapabilityReport {
 export function adapterUnavailableReport(): WebGpuCapabilityReport {
   return {
     status: "adapter-unavailable",
-    headline: "No compatible GPU adapter",
+    headline: "未找到兼容的 GPU 适配器",
     detail:
-      "WebGPU exists, but the browser could not provide an adapter. CPU fallback is ready and uses the same generated inputs.",
+      "浏览器支持 WebGPU，但无法提供适配器。CPU 回退路径已就绪，并会使用相同的生成输入。",
     adapter: null,
     features: [],
     limits: [],
@@ -47,8 +47,8 @@ export function adapterUnavailableReport(): WebGpuCapabilityReport {
 export function errorReport(error: unknown): WebGpuCapabilityReport {
   return {
     status: "error",
-    headline: "WebGPU initialization failed",
-    detail: error instanceof Error ? error.message : "An unknown initialization error occurred.",
+    headline: "WebGPU 初始化失败",
+    detail: error instanceof Error ? error.message : "初始化过程中发生未知错误。",
     adapter: null,
     features: [],
     limits: [],
@@ -61,17 +61,17 @@ export function buildCapabilityReport(
 ): WebGpuCapabilityReport {
   const info = adapter.info;
   const rawLimits = [
-    ["Max storage buffer", device.limits.maxStorageBufferBindingSize],
-    ["Max buffer size", device.limits.maxBufferSize],
-    ["Workgroup invocations", device.limits.maxComputeInvocationsPerWorkgroup],
-    ["Workgroup storage", device.limits.maxComputeWorkgroupStorageSize],
+    ["最大存储缓冲区", device.limits.maxStorageBufferBindingSize],
+    ["最大缓冲区大小", device.limits.maxBufferSize],
+    ["工作组最大调用数", device.limits.maxComputeInvocationsPerWorkgroup],
+    ["工作组存储空间", device.limits.maxComputeWorkgroupStorageSize],
   ] as const;
 
   return {
     status: "ready",
-    headline: "WebGPU compute ready",
+    headline: "WebGPU 计算已就绪",
     detail:
-      "The device is initialized locally. Benchmarks include command submission and result readback, not only shader time.",
+      "设备已在本地完成初始化。测量时间包含命令提交和结果回读，而不只是着色器执行时间。",
     adapter: {
       vendor: normalizeAdapterInfo(info.vendor),
       architecture: normalizeAdapterInfo(info.architecture),
@@ -82,7 +82,7 @@ export function buildCapabilityReport(
     limits: rawLimits.map(([label, value]) => ({
       label,
       value,
-      displayValue: label.includes("buffer") || label.includes("storage")
+      displayValue: label.includes("缓冲区") || label.includes("存储")
         ? formatBytes(value)
         : value.toLocaleString(),
     })),
@@ -91,7 +91,7 @@ export function buildCapabilityReport(
 
 export function formatBytes(bytes: number): string {
   if (!Number.isFinite(bytes) || bytes < 0) {
-    throw new RangeError("bytes must be a finite non-negative number");
+    throw new RangeError("字节数必须是有限的非负数");
   }
   if (bytes < 1024) {
     return `${bytes} B`;
@@ -107,5 +107,5 @@ export function formatBytes(bytes: number): string {
 }
 
 function normalizeAdapterInfo(value: string): string {
-  return value.trim() || "Not reported";
+  return value.trim() || "未报告";
 }

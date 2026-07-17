@@ -10,10 +10,10 @@ export interface BenchmarkStatistics {
 
 export function summarizeDurations(samples: readonly number[]): BenchmarkStatistics {
   if (samples.length === 0) {
-    throw new RangeError("at least one duration sample is required");
+    throw new RangeError("至少需要一个耗时样本");
   }
   if (samples.some((sample) => !Number.isFinite(sample) || sample < 0)) {
-    throw new RangeError("duration samples must be finite non-negative numbers");
+    throw new RangeError("耗时样本必须是有限的非负数");
   }
 
   const sorted = [...samples].sort((left, right) => left - right);
@@ -35,10 +35,10 @@ export function summarizeDurations(samples: readonly number[]): BenchmarkStatist
 
 export function percentile(sortedSamples: readonly number[], quantile: number): number {
   if (sortedSamples.length === 0) {
-    throw new RangeError("at least one sorted sample is required");
+    throw new RangeError("至少需要一个已排序样本");
   }
   if (quantile < 0 || quantile > 1 || !Number.isFinite(quantile)) {
-    throw new RangeError("quantile must be between 0 and 1");
+    throw new RangeError("分位数必须介于 0 和 1 之间");
   }
   const position = (sortedSamples.length - 1) * quantile;
   const lowerIndex = Math.floor(position);
@@ -66,7 +66,7 @@ export function calculateThroughput(
   elapsedMs: number,
 ): number {
   if (operationCount < 0 || !Number.isFinite(operationCount)) {
-    throw new RangeError("operation count must be finite and non-negative");
+    throw new RangeError("运算次数必须是有限的非负数");
   }
   if (elapsedMs <= 0 || !Number.isFinite(elapsedMs)) {
     return 0;

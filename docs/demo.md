@@ -1,65 +1,59 @@
-# Demo walkthrough
+# 演示指南
 
-This walkthrough demonstrates every user-visible path without an account or
-external service.
+本指南覆盖所有用户可见的使用路径，全程无需账号或外部服务。
 
-## 1. Inspect the device boundary
+## 1. 检查设备能力
 
-Open the local app and wait for the status pill to settle:
+打开本地应用，等待页面顶部的状态标签完成检测：
 
-- **WebGPU ready** means the browser returned an adapter and device.
-- **CPU fallback ready** means the app could not initialize WebGPU. This is a
-  supported mode, not an error page.
+- **WebGPU 已就绪**：浏览器成功返回适配器与设备。
+- **CPU 回退已就绪**：应用无法初始化 WebGPU。这是完整支持的运行模式，
+  不是错误页面。
 
-The device section shows only values supplied by the local WebGPU API. Optional
-features may be empty on a fully functional core device.
+设备能力区域只展示本地 WebGPU API 返回的值。即使可选功能列表为空，
+设备仍可能完整支持 WebGPU 核心功能。
 
-## 2. Run vector addition
+## 2. 运行向量加法
 
-1. Keep **Vector add** selected.
-2. Choose **Auto · prefer WebGPU**.
-3. Set the vector to `262,144`, warmups to `2`, and samples to `5`.
-4. Select **Run experiment**.
+1. 保持选中**向量加法**。
+2. 选择**自动 · 优先 WebGPU**。
+3. 将向量长度设为 `262,144`，预热次数设为 `2`，测量次数设为 `5`。
+4. 点击**运行实验**。
 
-The result should report:
+结果应当显示：
 
-- the actual CPU or WebGPU backend;
-- a passing comparison;
-- zero or near-zero maximum absolute error;
-- a `64`-wide workgroup dispatch when WebGPU ran; and
-- the first twelve output values as a compact fingerprint.
+- 实际使用的 CPU 或 WebGPU 后端；
+- 数值校验通过；
+- 最大绝对误差为零或接近零；
+- 使用 WebGPU 时，调度采用宽度为 `64` 的工作组；
+- 前十二个输出值组成的紧凑输出指纹。
 
-## 3. Compare matrix multiplication
+## 3. 比较矩阵乘法
 
-Select **Matrix multiply**, use a `64 × 64` matrix, and run again. The CPU
-reference and WGSL code both use the same conventional row-by-column multiply.
-The GPU dispatch rounds each axis up to an `8 × 8` workgroup while the shader's
-bounds check protects the logical matrix edge.
+选择**矩阵乘法**，使用 `64 × 64` 方阵并再次运行。CPU 参考实现和 WGSL
+代码都采用常规的行乘列算法。GPU 调度会按 `8 × 8` 工作组向上取整，
+着色器中的边界检查负责保护逻辑矩阵边缘。
 
-Try `16`, `64`, and `128`. Do not compare the timing with unrelated devices:
-the browser, driver, power mode, and readback cost all matter.
+可以依次尝试 `16`、`64` 和 `128`。请勿将耗时与无关设备直接比较：
+浏览器、驱动、电源模式和结果回读成本都会影响结果。
 
-## 4. Explore image convolution
+## 4. 探索图像卷积
 
-Select **Image convolution** and switch among:
+选择**图像卷积**，并在以下滤镜之间切换：
 
-- Gaussian blur;
-- sharpen; and
-- edge detect.
+- 高斯模糊；
+- 锐化；
+- 边缘检测。
 
-The input image is generated deterministically. Pixel coordinates outside an
-edge are clamped to the nearest valid coordinate on both CPU and GPU paths.
-RGB results are clamped to `[0, 1]`; alpha is preserved.
+输入图像由确定性算法生成。CPU 与 GPU 路径都会把超出边缘的像素坐标
+钳制到最近的有效坐标。RGB 结果被限制在 `[0, 1]`，透明度保持不变。
 
-## 5. Verify fallback explicitly
+## 5. 明确验证 CPU 回退
 
-Choose **CPU reference only** and run any experiment. The result identifies the
-CPU backend, reports `CPU loop` instead of a dispatch, and still performs
-warmups, multiple samples, output validation, and export.
+选择**仅使用 CPU 参考实现**并运行任意实验。结果会标明 CPU 后端，
+以“CPU 循环”代替调度规模，同时仍会执行预热、多次测量、输出校验和导出。
 
-## 6. Export evidence
+## 6. 导出实验结果
 
-After a successful run, choose **Export JSON**. The versioned document contains
-the parameters, backend, statistical summary, validation metrics, operation
-model, byte counts, and output preview. It does not include personal
-information, full arrays, or adapter identity.
+实验成功后点击**导出 JSON**。带版本号的文档包含参数、执行后端、统计摘要、
+校验指标、运算量模型、字节数与输出预览，不包含个人信息、完整数组或适配器身份。

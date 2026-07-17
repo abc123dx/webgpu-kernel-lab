@@ -81,7 +81,7 @@ export async function runExperiment(
   const shouldUseGpu = config.backend !== "cpu" && runtime !== null;
   const fallbackReason =
     config.backend !== "cpu" && !runtime
-      ? "WebGPU was unavailable, so the CPU reference path was used."
+      ? "WebGPU 不可用，已改用 CPU 参考路径。"
       : null;
 
   const cpuRun = await benchmarkCpu(
@@ -136,11 +136,11 @@ export async function runExperiment(
 }
 
 export function validateConfig(config: ExperimentConfig): void {
-  assertIntegerInRange(config.warmupIterations, 0, 10, "warmup iterations");
-  assertIntegerInRange(config.benchmarkIterations, 1, 30, "benchmark iterations");
-  assertIntegerInRange(config.vectorLength, 64, 4_194_304, "vector length");
-  assertIntegerInRange(config.matrixSize, 2, 192, "matrix size");
-  assertIntegerInRange(config.imageSize, 8, 1024, "image size");
+  assertIntegerInRange(config.warmupIterations, 0, 10, "预热次数");
+  assertIntegerInRange(config.benchmarkIterations, 1, 30, "测量次数");
+  assertIntegerInRange(config.vectorLength, 64, 4_194_304, "向量长度");
+  assertIntegerInRange(config.matrixSize, 2, 192, "矩阵规模");
+  assertIntegerInRange(config.imageSize, 8, 1024, "图像尺寸");
 }
 
 export function operationCountFor(
@@ -264,7 +264,7 @@ async function benchmarkGpu(
     onProgress?.("benchmarking", index + 1, iterations);
   }
   if (!lastResult) {
-    throw new Error("GPU benchmark produced no result");
+    throw new Error("GPU 测量未生成结果");
   }
   return {
     output: lastResult.values,
@@ -280,7 +280,7 @@ function assertIntegerInRange(
   label: string,
 ): void {
   if (!Number.isInteger(value) || value < minimum || value > maximum) {
-    throw new RangeError(`${label} must be an integer between ${minimum} and ${maximum}`);
+    throw new RangeError(`${label}必须是 ${minimum} 到 ${maximum} 之间的整数`);
   }
 }
 

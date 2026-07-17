@@ -12,7 +12,7 @@ export function createExportDocument(result: ExperimentResult): ExportDocument {
     schemaVersion: "1.0",
     generator: "webgpu-kernel-lab",
     note:
-      "Local browser measurement. Timings include submission and readback and are not comparable across unrelated devices.",
+      "本结果由浏览器本地测量。计时包含命令提交与结果回读，不应在无关设备之间直接比较。",
     result,
   };
 }

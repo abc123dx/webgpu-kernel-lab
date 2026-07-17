@@ -14,10 +14,10 @@ export function compareFloatArrays(
   tolerance = 1e-4,
 ): ValidationResult {
   if (actual.length !== expected.length) {
-    throw new RangeError("actual and expected arrays must have equal length");
+    throw new RangeError("实际数组与期望数组必须长度相同");
   }
   if (!Number.isFinite(tolerance) || tolerance < 0) {
-    throw new RangeError("tolerance must be finite and non-negative");
+    throw new RangeError("误差容限必须是有限的非负数");
   }
 
   let maximumAbsoluteError = 0;

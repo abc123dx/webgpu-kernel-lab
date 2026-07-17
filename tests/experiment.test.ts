@@ -49,7 +49,7 @@ describe("experiment orchestration", () => {
       null,
     );
     expect(result.backend).toBe("cpu");
-    expect(result.fallbackReason).toContain("WebGPU was unavailable");
+    expect(result.fallbackReason).toContain("WebGPU 不可用");
   });
 
   it("runs the matrix CPU path", async () => {
@@ -75,6 +75,7 @@ describe("experiment orchestration", () => {
     const document = createExportDocument(result);
     expect(document.schemaVersion).toBe("1.0");
     expect(document.generator).toBe("webgpu-kernel-lab");
+    expect(document.note).toContain("浏览器本地测量");
     expect(serializeResult(result).endsWith("\n")).toBe(true);
     expect(serializeResult(result)).not.toMatch(/email|contact|location/i);
   });

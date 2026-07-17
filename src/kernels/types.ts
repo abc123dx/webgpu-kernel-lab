@@ -18,24 +18,24 @@ export const KERNELS: readonly KernelDescriptor[] = [
   {
     kind: "vector-add",
     shortName: "AX + BY",
-    title: "Vector add",
-    description: "One-dimensional parallel addition with bounds-safe dispatch.",
+    title: "向量加法",
+    description: "带边界保护的一维并行加法。",
     workgroup: "64 × 1 × 1",
     accent: "lime",
   },
   {
     kind: "matrix-multiply",
     shortName: "A × B",
-    title: "Matrix multiply",
-    description: "Square matrix multiplication across a two-dimensional grid.",
+    title: "矩阵乘法",
+    description: "在二维网格上执行方阵乘法。",
     workgroup: "8 × 8 × 1",
     accent: "cyan",
   },
   {
     kind: "image-convolution",
     shortName: "3 × 3",
-    title: "Image convolution",
-    description: "A clamped 3 × 3 filter over a generated RGBA image.",
+    title: "图像卷积",
+    description: "对生成的 RGBA 图像应用带边缘钳制的 3 × 3 滤镜。",
     workgroup: "8 × 8 × 1",
     accent: "violet",
   },
@@ -44,7 +44,7 @@ export const KERNELS: readonly KernelDescriptor[] = [
 export function getKernelDescriptor(kind: KernelKind): KernelDescriptor {
   const descriptor = KERNELS.find((candidate) => candidate.kind === kind);
   if (!descriptor) {
-    throw new Error(`Unknown kernel: ${kind}`);
+    throw new Error(`未知内核：${kind}`);
   }
   return descriptor;
 }

@@ -36,10 +36,10 @@ export function matrixMultiplyCpu(
   size: number,
 ): Float32Array {
   if (!Number.isInteger(size) || size <= 0) {
-    throw new RangeError("matrix size must be a positive integer");
+    throw new RangeError("矩阵规模必须是正整数");
   }
   if (matrixA.length !== size * size || matrixB.length !== size * size) {
-    throw new RangeError("matrix inputs must contain size × size elements");
+    throw new RangeError("矩阵输入必须包含 size × size 个元素");
   }
 
   const output = new Float32Array(size * size);
